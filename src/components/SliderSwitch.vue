@@ -1,36 +1,36 @@
 <template>
   <label class="switch">
-    <input type="checkbox" :value="active" v-model="active">
+    <input type="checkbox" :value="active" v-model="active" />
     <span class="sliderButton round"></span>
   </label>
 </template>
 
 <script>
 export default {
-  name: "SliderSwitch",
-  data(){
+  name: 'SliderSwitch',
+  data() {
     return {
-      active: false
+      active: false,
     }
   },
   watch: {
-      active: function(value){
-          this.$emit('activate', value);
-      }
-  }
-};
+    active: function (value) {
+      this.$emit('activate', value)
+    },
+  },
+}
 </script>
 
 <style lang="scss">
-.switch{
-    margin: 0 10px;
-    position: relative;
-    display: inline-block;
-    width: 60px;
-    height: 34px;
+.switch {
+  margin: 0 10px;
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
 }
 
-.switch input { 
+.switch input {
   opacity: 0;
   width: 0;
   height: 0;
@@ -44,20 +44,20 @@ export default {
   right: 0;
   bottom: 0;
   background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
 }
 
 .sliderButton:before {
   position: absolute;
-  content: "";
+  content: '';
   height: 26px;
   width: 26px;
   left: 4px;
   bottom: 4px;
   background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
 }
 
 input:checked + .sliderButton {
@@ -82,5 +82,4 @@ input:checked + .sliderButton:before {
 .sliderButton.round:before {
   border-radius: 50%;
 }
-
 </style>

@@ -1,31 +1,43 @@
 <template>
-  <div v-bind:class="(hover.one == index || hover.two == index || (hover.one == -1 && hover.two == -1)) ? 'backBox' : 'backBoxSmall'">
+  <div
+    v-bind:class="
+      hover.one == index || hover.two == index || (hover.one == -1 && hover.two == -1)
+        ? 'backBox'
+        : 'backBoxSmall'
+    "
+  >
     <p
-      v-bind:class="(hover.one == index || hover.two == index || (hover.one == -1 && hover.two == -1)) ? 'centerLetter' : 'centerLetterSmall'"
-    >{{ hitType }}</p>
+      v-bind:class="
+        hover.one == index || hover.two == index || (hover.one == -1 && hover.two == -1)
+          ? 'centerLetter'
+          : 'centerLetterSmall'
+      "
+    >
+      {{ hitType }}
+    </p>
   </div>
 </template>
 
 <script>
 export default {
-  name: "DrumHit",
-  props: ["hitType", "active", "hover", "index"],
+  name: 'DrumHit',
+  props: ['hitType', 'active', 'hover', 'index'],
   data() {
     return {
-      hitLetter: this.hitType
-    };
+      hitLetter: this.hitType,
+    }
   },
   watch: {
     data(val) {
-      this.hitLetter = val;
-    }
-  }
-};
+      this.hitLetter = val
+    },
+  },
+}
 </script>
 
 <style lang="scss">
 .backBox {
-  background-color: #ddd;
+  background-color: rgba(255, 255, 255, 0.7);
   color: #333;
   width: 4em;
   height: 6em;
@@ -37,12 +49,12 @@ export default {
 }
 
 .backBox:active {
-  background-color: #ccc;
+  background-color: rgba(255, 255, 255, 0.9);
   transition: 0s;
 }
 
 .backBoxSmall {
-  background-color: #eaeaea;
+  background-color: rgba(255, 255, 255, 0.5);
   color: #888;
   width: 3.5em;
   height: 5.5em;
