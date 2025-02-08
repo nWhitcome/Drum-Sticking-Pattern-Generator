@@ -46,7 +46,6 @@
 
 <script>
 import DrumHit from './components/DrumHit.vue'
-import SliderSwitch from './components/SliderSwitch.vue'
 export default {
   name: 'app',
   components: { DrumHit },
@@ -251,6 +250,7 @@ i {
 
 .generalBox {
   flex-direction: column;
+  color: #222;
 }
 
 .noselect {
