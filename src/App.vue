@@ -21,7 +21,7 @@
       />
     </div>
     <div class="generalBox">
-      <div class="hitsBox">
+      <div class="hitsBox animateIn">
         <DrumHit
           class="noselect"
           v-for="(n, i) in patternArray"
@@ -32,19 +32,14 @@
           :index="i"
           @mouseover="highlighted.one = i"
           @mouseleave="highlighted.one = -1"
-          @click="changeLetter(i)"
         ></DrumHit>
       </div>
       <div @click="genPattern()" id="genButton" class="noselect">Generate</div>
-      <!-- <div class="slideAndLabel">
-        <h2>Dark Mode</h2>
-        <SliderSwitch :toTrigger="'darkMode'" @activate="darkMode($event)"></SliderSwitch>
-      </div> -->
     </div>
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import DrumHit from './components/DrumHit.vue'
 export default {
   name: 'app',
@@ -97,7 +92,7 @@ export default {
         this.patternArray.push(letter)
       }
     },
-    changeLetter: function (i) {
+    changeLetter: function (i: string | number) {
       //var audio = new Audio("./src/audio/mid.mp3");
       //audio.play();
       this.patternArray[i] =
@@ -215,25 +210,23 @@ i {
 }
 
 #genButton {
-  background-color: var(--blue_general);
-  width: 8em;
-  color: white;
+  background-color: rgba(255, 255, 255, 0.7);
+  width: 10rem;
   height: var(--button-height);
   cursor: pointer;
-  border-radius: 1em;
-  font-size: 1.5em;
+  border-radius: 2rem;
+  font-size: 1.5rem;
   line-height: var(--button-height);
-  margin: 20px auto;
-  opacity: 0.8;
-  -webkit-transition: var(--transition-time);
-  transition: opacity var(--transition-time);
+  transition: 0.2s;
 }
 
 #genButton:active {
-  -webkit-transition: 0s;
-  transition: opacity 0s;
-  background-color: var(--blue-dark);
-  padding: 32px;
+  background-color: rgba(255, 255, 255, 0.85);
+  transition: 0.05s;
+  width: 9.5rem;
+  height: 2.75rem;
+  line-height: 2.75rem;
+  margin: 0.125rem 0;
 }
 
 .hitsBox,
@@ -244,6 +237,12 @@ i {
   justify-content: center;
 }
 
+.animateIn {
+  animation-timing-function: cubic-bezier(0.53, 0.26, 0.29, 1.31);
+  animation-name: animate-pop;
+  animation-duration: 1s;
+}
+
 .hitsBox {
   flex-direction: row;
 }
@@ -251,6 +250,7 @@ i {
 .generalBox {
   flex-direction: column;
   color: #222;
+  gap: 1rem;
 }
 
 .noselect {
@@ -283,10 +283,9 @@ i {
   margin: 10px 0 20px 0;
 }
 
-/* Mouse-over effects */
-.slider:hover,
 #genButton:hover {
-  opacity: 1;
+  transition: 0.2s;
+  background-color: rgba(255, 255, 255, 0.8);
 }
 
 .slider::-webkit-slider-thumb {
@@ -329,5 +328,18 @@ h1 {
   display: flex;
   flex-direction: row;
   align-items: center;
+}
+
+@keyframes animate-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.95, 0.95);
+    transform: translate(0, 20px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1, 1);
+    transform: translate(0, 0);
+  }
 }
 </style>

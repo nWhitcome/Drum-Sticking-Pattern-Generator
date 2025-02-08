@@ -1,6 +1,7 @@
 <template>
   <div class="backBox">
     <p
+      @click="$parent.changeLetter(index)"
       v-bind:class="
         hover.one == index || hover.two == index || (hover.one == -1 && hover.two == -1)
           ? 'centerLetter'
@@ -12,7 +13,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   name: 'DrumHit',
   props: ['hitType', 'active', 'hover', 'index'],
@@ -40,7 +41,7 @@ export default {
 }
 
 .centerLetter:active {
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(255, 255, 255, 0.75);
   width: 3.8rem;
   height: 5.8rem;
   transition: 0.05s;
@@ -72,5 +73,13 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.popin-enter-from {
+  opacity: 1;
+}
+
+.popin-enter-active {
+  transition: opacity 0.5s ease;
 }
 </style>
