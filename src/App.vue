@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="padding: 20px">
     <h1>
       Metronome:
       <input class="textInput" type="number" min="10" max="300" v-model="metronome.bpm" />BPM

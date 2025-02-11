@@ -63,6 +63,7 @@ export default {
 
 .centerLetterSmall {
   background-color: rgba(255, 255, 255, 0.5);
+  color: #222;
   font-size: 1.75rem;
   width: 100%;
   height: 100%;
