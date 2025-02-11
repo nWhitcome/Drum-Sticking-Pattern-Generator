@@ -1,8 +1,11 @@
-import Vue from 'vue'
-import App from './App.vue'
-import {Howl, Howler} from 'howler';
+import './assets/main.css'
 
-new Vue({
-  el: '#app',
-  render: h => h(App)
-})
+import { createApp } from 'vue'
+import App from './App.vue'
+import router from './router'
+
+const app = createApp(App)
+
+app.use(router)
+
+app.mount('#app')
