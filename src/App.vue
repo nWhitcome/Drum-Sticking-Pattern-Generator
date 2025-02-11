@@ -5,9 +5,9 @@
       <input class="textInput" type="number" min="10" max="300" v-model="metronome.bpm" />BPM
     </h1>
     <div class="arrowHolder noselect">
-      <div class="arrowInnerBox">
-        <i @click="playPause()" style="cursor: pointer">{{ getPlayPauseIcon }}</i>
-      </div>
+      <i @click="playPause()" class="arrowInnerBox" style="cursor: pointer">{{
+        getPlayPauseIcon
+      }}</i>
     </div>
     <b style="font-size: 26px; margin: 10px">{{ numHitsVar }}</b>
     <div class="slideContainer">
@@ -30,6 +30,7 @@
           :key="'item' + i + keyUpdate"
           :hover="highlighted"
           :index="i"
+          @change-letter="(index) => changeLetter(index)"
           @mouseover="highlighted.one = i"
           @mouseleave="highlighted.one = -1"
         ></DrumHit>
@@ -39,9 +40,10 @@
   </div>
 </template>
 
-<script lang="js">
+<script lang="ts">
 import DrumHit from './components/DrumHit.vue'
 import { Howl } from 'howler'
+const patternArray: string[] = []
 export default {
   name: 'app',
   components: { DrumHit },
@@ -49,7 +51,7 @@ export default {
     return {
       numHitsVar: 5,
       possArray: ['L', 'R', 'K'],
-      patternArray: [],
+      patternArray,
       highlighted: {
         one: -1,
         two: -1,
@@ -57,15 +59,15 @@ export default {
       keyUpdate: 0,
       metronome: {
         bpm: 120,
-        interval: null,
+        interval: 0,
         index: 0,
       },
       isPlaying: false,
       maxHits: 15,
       audioFiles: {
-        L: new Howl({ src: 'src/assets/SnareHit.mp3' }),
-        R: new Howl({ src: 'src/assets/HiHat.mp3', volume: 0.7 }),
-        K: new Howl({ src: 'src/assets/Kick.mp3', volume: 0.8 }),
+        L: new Howl({ src: '/audio/SnareHit.mp3' }),
+        R: new Howl({ src: '/audio/HiHat.mp3', volume: 0.7 }),
+        K: new Howl({ src: '/audio/Kick.mp3', volume: 0.8 }),
       },
     }
   },
@@ -93,7 +95,7 @@ export default {
         this.patternArray.push(letter)
       }
     },
-    changeLetter: function (i) {
+    changeLetter: function (i: number) {
       //var audio = new Audio("./src/audio/mid.mp3");
       //audio.play();
       this.patternArray[i] =
@@ -103,7 +105,17 @@ export default {
     playPause: function () {
       if (this.isPlaying) {
         this.isPlaying = false
+        clearInterval(this.metronome.interval)
+        this.highlighted.two = -1
       } else {
+        this.isPlaying = false
+        clearInterval(this.metronome.interval)
+        this.metronome.interval = setInterval(
+          () => {
+            this.playSound()
+          },
+          (60 * 1000) / this.metronome.bpm,
+        )
         this.isPlaying = true
       }
     },
@@ -127,17 +139,8 @@ export default {
   computed: {
     getPlayPauseIcon: function () {
       if (this.isPlaying) {
-        clearInterval(this.metronome.interval)
-        this.metronome.interval = setInterval(
-          () => {
-            this.playSound()
-          },
-          (60 * 1000) / this.metronome.bpm,
-        )
         return 'pause'
       } else {
-        this.highlighted.two = -1
-        clearInterval(this.metronome.interval)
         return 'play_arrow'
       }
     },
@@ -164,28 +167,6 @@ export default {
   font-size: 50px;
 }
 
-.arrowInnerBox {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  transition: var(--transition-time);
-  color: var(--blue_general);
-}
-
-.arrowInnerBox:hover {
-  border: 4px solid var(--blue_general);
-}
-
-.arrowInnerBox:active {
-  transition: 0s;
-  border: 4px solid var(--blue_general);
-  background-color: var(--blue_general);
-  color: white;
-}
-
 i {
   font-family: 'Material_Icons';
   font-style: normal;
@@ -195,6 +176,7 @@ i {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -208,10 +190,23 @@ i {
   margin: 0px;
   padding: 0px;
   transition: var(--transition-time);
+  color: var(--off-white);
+  line-height: 1.6;
+  font-size: 15px;
+  background: linear-gradient(
+    -45deg,
+    var(--gradient-three),
+    var(--gradient-four),
+    var(--gradient-one),
+    var(--gradient-two)
+  );
+  background-size: 400% 400%;
+  animation: gradient 60s ease infinite;
 }
 
 #genButton {
   background-color: rgba(255, 255, 255, 0.7);
+  color: #222;
   width: 10rem;
   height: var(--button-height);
   cursor: pointer;
@@ -250,7 +245,6 @@ i {
 
 .generalBox {
   flex-direction: column;
-  color: #222;
   gap: 1rem;
 }
 
@@ -341,6 +335,31 @@ h1 {
     opacity: 1;
     transform: scale(1, 1);
     transform: translate(0, 0);
+  }
+}
+
+:root {
+  --blue-general: #2471a3;
+  --blue-dark: #1c5a82;
+  --slider-color: #d3d3d3;
+  --transition-time: 0.2s;
+  --button-height: 3rem;
+  --gradient-one: rgb(2, 48, 32);
+  --gradient-two: rgb(3, 56, 37);
+  --gradient-three: rgb(2, 35, 23);
+  --gradient-four: rgb(1, 18, 12);
+  --off-white: #d9d7d7;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
   }
 }
 </style>
