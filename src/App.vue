@@ -65,9 +65,9 @@ export default {
       isPlaying: false,
       maxHits: 15,
       audioFiles: {
-        L: new Howl({ src: 'src/assets/SnareHit.mp3' }),
-        R: new Howl({ src: 'src/assets/HiHat.mp3', volume: 0.7 }),
-        K: new Howl({ src: 'src/assets/Kick.mp3', volume: 0.8 }),
+        L: new Howl({ src: '/audio/SnareHit.mp3' }),
+        R: new Howl({ src: '/audio/HiHat.mp3', volume: 0.7 }),
+        K: new Howl({ src: '/audio/Kick.mp3', volume: 0.8 }),
       },
     }
   },
@@ -206,6 +206,7 @@ i {
 
 #genButton {
   background-color: rgba(255, 255, 255, 0.7);
+  color: #222;
   width: 10rem;
   height: var(--button-height);
   cursor: pointer;
