@@ -5,8 +5,8 @@
       <input class="textInput" type="number" min="10" max="300" v-model="metronome.bpm" />BPM
     </h1>
     <div class="arrowHolder noselect">
-      <div class="arrowInnerBox">
-        <i @click="playPause()" style="cursor: pointer">{{ getPlayPauseIcon }}</i>
+      <div @click="playPause()" class="arrowInnerBox">
+        <i style="cursor: pointer">{{ getPlayPauseIcon }}</i>
       </div>
     </div>
     <b style="font-size: 26px; margin: 10px">{{ numHitsVar }}</b>
@@ -30,6 +30,7 @@
           :key="'item' + i + keyUpdate"
           :hover="highlighted"
           :index="i"
+          @change-letter="(index) => changeLetter(index)"
           @mouseover="highlighted.one = i"
           @mouseleave="highlighted.one = -1"
         ></DrumHit>
@@ -39,9 +40,10 @@
   </div>
 </template>
 
-<script lang="js">
+<script lang="ts">
 import DrumHit from './components/DrumHit.vue'
 import { Howl } from 'howler'
+const patternArray: string[] = []
 export default {
   name: 'app',
   components: { DrumHit },
@@ -49,7 +51,7 @@ export default {
     return {
       numHitsVar: 5,
       possArray: ['L', 'R', 'K'],
-      patternArray: [],
+      patternArray,
       highlighted: {
         one: -1,
         two: -1,
@@ -57,7 +59,7 @@ export default {
       keyUpdate: 0,
       metronome: {
         bpm: 120,
-        interval: null,
+        interval: 0,
         index: 0,
       },
       isPlaying: false,
@@ -93,7 +95,7 @@ export default {
         this.patternArray.push(letter)
       }
     },
-    changeLetter: function (i) {
+    changeLetter: function (i: number) {
       //var audio = new Audio("./src/audio/mid.mp3");
       //audio.play();
       this.patternArray[i] =
@@ -103,7 +105,17 @@ export default {
     playPause: function () {
       if (this.isPlaying) {
         this.isPlaying = false
+        clearInterval(this.metronome.interval)
+        this.highlighted.two = -1
       } else {
+        this.isPlaying = false
+        clearInterval(this.metronome.interval)
+        this.metronome.interval = setInterval(
+          () => {
+            this.playSound()
+          },
+          (60 * 1000) / this.metronome.bpm,
+        )
         this.isPlaying = true
       }
     },
@@ -127,17 +139,8 @@ export default {
   computed: {
     getPlayPauseIcon: function () {
       if (this.isPlaying) {
-        clearInterval(this.metronome.interval)
-        this.metronome.interval = setInterval(
-          () => {
-            this.playSound()
-          },
-          (60 * 1000) / this.metronome.bpm,
-        )
         return 'pause'
       } else {
-        this.highlighted.two = -1
-        clearInterval(this.metronome.interval)
         return 'play_arrow'
       }
     },

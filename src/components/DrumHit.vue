@@ -1,7 +1,7 @@
 <template>
   <div class="backBox">
     <p
-      @click="$parent.changeLetter(index)"
+      v-on:click="$emit('change-letter', index)"
       v-bind:class="
         hover.one == index || hover.two == index || (hover.one == -1 && hover.two == -1)
           ? 'centerLetter'
@@ -13,7 +13,7 @@
   </div>
 </template>
 
-<script lang="js">
+<script lang="ts">
 export default {
   name: 'DrumHit',
   props: ['hitType', 'active', 'hover', 'index'],
