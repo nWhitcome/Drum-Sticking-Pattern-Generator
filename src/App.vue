@@ -62,9 +62,9 @@ export default {
       isPlaying: false,
       maxHits: 15,
       audioFiles: {
-        L: new Howl({ src: 'src/audio/mid.mp3' }),
-        R: new Howl({ src: 'src/audio/high.mp3' }),
-        K: new Howl({ src: 'src/audio/low.mp3' }),
+        L: new Howl({ src: 'src/assets/SnareHit.mp3' }),
+        R: new Howl({ src: 'src/assets/HiHat.mp3', volume: 0.7 }),
+        K: new Howl({ src: 'src/assets/Kick.mp3', volume: 0.8 }),
       },
     }
   },
