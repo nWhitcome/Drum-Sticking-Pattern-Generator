@@ -39,8 +39,9 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="js">
 import DrumHit from './components/DrumHit.vue'
+import { Howl } from 'howler'
 export default {
   name: 'app',
   components: { DrumHit },
@@ -92,7 +93,7 @@ export default {
         this.patternArray.push(letter)
       }
     },
-    changeLetter: function (i: string | number) {
+    changeLetter: function (i) {
       //var audio = new Audio("./src/audio/mid.mp3");
       //audio.play();
       this.patternArray[i] =
