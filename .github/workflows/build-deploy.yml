@@ -5,8 +5,7 @@ on:
   workflow_dispatch:
     inputs:
       deploy-build:
-        type: boolean
-        default: false
+        default: 'false'
         description: Deploy page after building
   pull_request:
     types: [opened, reopened, synchronize]
@@ -41,7 +40,7 @@ jobs:
     name: Deploy
     runs-on: ubuntu-latest
     needs: build
-    if: (${{inputs.deploy-build == true}} || github.event.pull_request.merged) && github.ref == 'refs/heads/master'
+    if: (${{inputs.deploy-build == 'true'}} || github.event.pull_request.merged) && github.ref == 'refs/heads/master'
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v4
