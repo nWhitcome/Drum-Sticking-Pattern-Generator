@@ -44,7 +44,6 @@ jobs:
     needs: build
     if: ${{(inputs.deploy-build == true || github.event.pull_request.merged) && github.ref == 'refs/heads/master'}}
     steps:
-      - run: echo ${{(inputs.deploy-build == true || github.event.pull_request.merged) && github.ref == 'refs/heads/master'}}
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
