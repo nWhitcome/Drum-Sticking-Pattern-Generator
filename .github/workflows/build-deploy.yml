@@ -1,4 +1,4 @@
-# Builds and deploys the pipeline
+# Builds and deploys the pipeline depending on input
 name: Build/Deploy
 
 on:
