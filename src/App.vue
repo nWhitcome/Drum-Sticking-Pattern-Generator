@@ -1,9 +1,16 @@
 <template>
   <div style="padding: 20px">
-    <h1>
-      Metronome:
-      <input class="textInput" type="number" min="10" max="300" v-model="metronome.bpm" />BPM
-    </h1>
+    <b style="font-size: 26px; margin: 10px">{{ metronome.bpm }} BPM</b>
+    <div class="slideContainer">
+      <input
+        type="range"
+        min="20"
+        v-bind:max="metronome.maxBPM"
+        v-model="metronome.bpm"
+        class="slider"
+        id="numHits"
+      />
+    </div>
     <div class="arrowHolder noselect">
       <i @click="playPause()" class="arrowInnerBox" style="cursor: pointer">{{
         getPlayPauseIcon
@@ -58,6 +65,7 @@ export default {
       },
       keyUpdate: 0,
       metronome: {
+        maxBPM: 300,
         bpm: 120,
         interval: 0,
         index: 0,
@@ -70,6 +78,19 @@ export default {
         K: new Howl({ src: '/audio/Kick.mp3', volume: 0.8 }),
       },
     }
+  },
+  watch: {
+    "metronome.bpm": function (newVal) {
+      if(this.isPlaying){
+        clearInterval(this.metronome.interval)
+        this.metronome.interval = setInterval(
+          () => {
+            this.playSound()
+          },
+          (60 * 1000) / (newVal * 2),
+        )
+      }
+    },
   },
   methods: {
     /*
@@ -103,18 +124,17 @@ export default {
       this.keyUpdate++
     },
     playPause: function () {
+      clearInterval(this.metronome.interval)
       if (this.isPlaying) {
         this.isPlaying = false
-        clearInterval(this.metronome.interval)
         this.highlighted.two = -1
       } else {
         this.isPlaying = false
-        clearInterval(this.metronome.interval)
         this.metronome.interval = setInterval(
           () => {
             this.playSound()
           },
-          (60 * 1000) / this.metronome.bpm,
+          (60 * 1000) / (this.metronome.bpm * 2),
         )
         this.isPlaying = true
       }
@@ -143,7 +163,7 @@ export default {
       } else {
         return 'play_arrow'
       }
-    },
+    }
   },
   beforeMount() {
     this.genPattern()
