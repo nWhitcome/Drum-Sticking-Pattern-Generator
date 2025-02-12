@@ -1,6 +1,14 @@
-name: Deploy
+name: Build/Deploy
 
 on:
+  workflow_dispatch:
+    inputs:
+      deploy-build:
+        type: boolean
+        default: false
+        description: Deploy page after building
+  pull_request:
+    types: [opened, reopened, synchronize]
   push:
     branches:
       - master
@@ -31,9 +39,9 @@ jobs:
 
   deploy:
     name: Deploy
-    needs: build
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    needs: build
+    if: (${{inputs.deploy-build}} || github.ref_type = 'push' ) && github.ref == 'refs/heads/main'
 
     steps:
       - name: Download artifact
