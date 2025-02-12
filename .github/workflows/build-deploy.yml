@@ -5,7 +5,8 @@ on:
   workflow_dispatch:
     inputs:
       deploy-build:
-        default: 'false'
+        type: boolean
+        default: false
         description: Deploy page after building
   pull_request:
     types: [opened, reopened, synchronize]
@@ -18,7 +19,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - run: echo ${{inputs.deploy-build}}
+      - run: echo ${{inputs.deploy-build == true}}
       - name: Checkout repo
         uses: actions/checkout@v3
 
